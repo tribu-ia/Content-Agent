@@ -94,6 +94,20 @@ def local_whisper_process(input_folder, crew_output_folder, transcript=None, sub
                         srt_file.write(full_subtitles)
             else:
                 initial_srt_path = os.path.join(crew_output_folder, f"{os.path.splitext(filename)[0]}.srt")
+                logging.info(f"Skipping transcription {initial_srt_path}")
+
+            # Add these diagnostic checks
+            logging.info(f"Checking file: {initial_srt_path}")
+            if os.path.exists(initial_srt_path):
+                logging.info("File exists")
+                try:
+                    with open(initial_srt_path, 'r', encoding='utf-8') as f:
+                        first_line = f.readline()
+                        logging.info(f"File is readable. First line: {first_line}")
+                except Exception as e:
+                    logging.error(f"Error reading file: {e}")
+            else:
+                logging.error("File does not exist")
 
             if wait_for_file(initial_srt_path):
                 whisper_output_dir = 'whisper_output'

@@ -69,7 +69,7 @@ def main(extracts):
         verbose=True,
         max_iter=1,
         max_rpm=1,
-        llm=ChatGoogleGenerativeAI(model="gemini-1.5-pro-exp-0801",
+        llm=ChatGoogleGenerativeAI(model="gemini-pro",
                                    verbose=True,
                                    temperature=0.0,
                                    google_api_key=gemini_api_key)
@@ -92,7 +92,7 @@ def main(extracts):
         verbose=True,
         max_iter=1,
         max_rpm=1,
-        llm=ChatGoogleGenerativeAI(model="gemini-1.5-pro-exp-0801",
+        llm=ChatGoogleGenerativeAI(model="gemini-pro",
                                    verbose=True,
                                    temperature=0.0,
                                    google_api_key=gemini_api_key)
@@ -115,7 +115,7 @@ def main(extracts):
         verbose=True,
         max_iter=1,
         max_rpm=1,
-        llm=ChatGoogleGenerativeAI(model="gemini-1.5-pro-exp-0801",
+        llm=ChatGoogleGenerativeAI(model="gemini-pro",
                                    verbose=True,
                                    temperature=0.0,
                                    google_api_key=gemini_api_key)

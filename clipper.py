@@ -37,8 +37,21 @@ def process_video(input_video, subtitle_file_path, output_folder, aspect_ratio_c
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
 
-    with open(subtitle_file_path, 'r') as file:
-        subtitles_content = file.read()
+    # Try different encodings to read the subtitle file
+    encodings = ['utf-8', 'latin-1', 'cp1252', 'iso-8859-1']
+    subtitles_content = None
+    
+    for encoding in encodings:
+        try:
+            with open(subtitle_file_path, 'r', encoding=encoding) as file:
+                subtitles_content = file.read()
+                break
+        except UnicodeDecodeError:
+            continue
+    
+    if subtitles_content is None:
+        logging.error(f"Failed to read subtitle file with any of the attempted encodings: {encodings}")
+        return
 
     assert subtitles_content != "", "clipper.py received an empty subtitles file"
 
@@ -68,7 +81,7 @@ def process_video(input_video, subtitle_file_path, output_folder, aspect_ratio_c
         logging.warning(
             f"Video fragment duration ({duration_seconds:.2f} seconds) is less than 30 seconds. Skipping this subtitle file.")
         return
-    if duration_seconds > 150:  # 150 seconds = 2 minutes 30 seconds
+    if duration_seconds > 750:  # 150 seconds = 2 minutes 30 seconds
         logging.warning(
             f"Video fragment duration ({duration_seconds:.2f} seconds) exceeds 2 minutes 30 seconds. Skipping this subtitle file.")
         return
@@ -124,6 +137,7 @@ def process_video(input_video, subtitle_file_path, output_folder, aspect_ratio_c
 
 
 def main(input_video, subtitle_file_path, output_folder, aspect_ratio_choice=None):
+    logging.info(f'~~~CLIPPER: PROCESSING VIDEO~~~, {input_video}, {subtitle_file_path}, {output_folder}, {aspect_ratio_choice}')
     if aspect_ratio_choice is None:
         aspect_ratio_choice = get_aspect_ratio_choice()
     process_video(input_video, subtitle_file_path, output_folder, aspect_ratio_choice)

@@ -3,29 +3,27 @@ import os
 import warnings
 import logging
 from pathlib import Path
-from send2trash import send2trash
+import argparse
 
 # Third party imports
 from dotenv import load_dotenv
+from send2trash import send2trash
 
 # Local application imports
-import clipper
-import subtitler
-import crew
-from ytdl import main as ytdl_main
-from local_transcribe import local_whisper_process
-import extracts
+from utils import setup_logging, create_directories
+from workflow import WorkflowController
 
 # Setup logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = setup_logging()
 
+# Suppress warnings
 warnings.filterwarnings("ignore")
 
 # Load environment variables
 load_dotenv()
 
 # List of required environment variables
-required_vars = ['OPENAI_API_KEY', 'GEMINI_API_KEY']
+required_vars = ['OPENAI_API_KEY']
 
 """
 This for loop checks if the required environment variables are set. 
@@ -36,95 +34,116 @@ for var in required_vars:
     if value is None or value == 'None':
         raise EnvironmentError(f"Required environment variable {var} is not set or is set to 'None'.")
 
-def get_aspect_ratio_choice():
-    while True:
-        choice = input("Choose aspect ratio for all videos: (1) Keep as original, (2) 1:1 (square): ")
-        if choice in ['1', '2']:
-            return choice
-        print("Invalid choice. Please enter 1 or 2.")
+def clean_output_directories(directories):
+    """Clean output directories by moving files to trash"""
+    for directory in directories:
+        if not os.path.exists(directory):
+            continue
+            
+        for filename in os.listdir(directory):
+            file_path = os.path.join(directory, filename)
+            try:
+                if os.path.isfile(file_path):
+                    send2trash(file_path)
+                    logger.info(f"Moved {file_path} to trash")
+            except Exception as e:
+                logger.error(f"Error while moving {file_path} to trash: {e}")
 
-def clean_whisper_output():
-    whisper_output_folder = './whisper_output'
-    for filename in os.listdir(whisper_output_folder):
-        file_path = os.path.join(whisper_output_folder, filename)
-        try:
-            if os.path.isfile(file_path):
-                send2trash(file_path)
-                logging.info(f"Moved {file_path} to trash")
-        except Exception as e:
-            logging.error(f"Error while moving {file_path} to trash: {e}")
+def parse_arguments():
+    """Parse command line arguments"""
+    parser = argparse.ArgumentParser(description="Viral Clips Workflow")
+    
+    # Input source options
+    parser.add_argument('--youtube', '-y', type=str, help="YouTube URL to process")
+    parser.add_argument('--input-file', '-i', type=str, help="Local video file to process")
+    parser.add_argument('--input-dir', '-d', type=str, default="./input_files", help="Directory containing video files to process")
+    
+    # Platform targeting
+    parser.add_argument('--platforms', '-p', type=str, nargs='+', 
+                        choices=['instagram', 'tiktok', 'youtube', 'linkedin'], 
+                        default=['instagram', 'tiktok', 'youtube'],
+                        help="Target platforms for content")
+    
+    # Processing options
+    parser.add_argument('--clean', '-c', action='store_true', help="Clean output directories before processing")
+    parser.add_argument('--state-file', '-s', type=str, help="Load workflow state from file")
+    
+    return parser.parse_args()
 
 def main():
-    input_folder = './input_files'
-    output_video_folder = './clipper_output'
-    crew_output_folder = './crew_output'
-    whisper_output_folder = './whisper_output'
-    subtitler_output_folder = './subtitler_output'
-
-    # Ensure all necessary directories exist
-    for folder in [input_folder, output_video_folder, crew_output_folder, whisper_output_folder, subtitler_output_folder]:
-        os.makedirs(folder, exist_ok=True)
-
-    # User selection
-    while True:
-        logging.info("Please select an option to proceed:")
-        logging.info("1: Submit a YouTube Video Link")
-        logging.info("2: Use an existing video file")
-        choice = input("Please choose either option 1 or 2: ")
-
-        if choice == '1':
-            logging.info("Submitting a YouTube Video Link")
-            url = input("Enter the YouTube URL: ")
-            ytdl_main(url, input_folder, whisper_output_folder, whisper_output_folder)
-            break
-        elif choice == '2':
-            logging.info("Using an existing video file")
-            if not os.listdir(input_folder):
-                logging.error(f"No video files found in the folder: {input_folder}")
-                continue
-            clean_whisper_output()  # Clean whisper_output folder
-            local_whisper_process(input_folder, whisper_output_folder)
-            break
-        else:
-            logging.info("Invalid choice. Please try again.")
-
-    # Get aspect ratio choice
-    aspect_ratio_choice = get_aspect_ratio_choice()
-
-    # After processing with ytdl or local_whisper_process
-    extracts_data = extracts.main()
-    if extracts_data is None:
-        logging.error("Failed to generate extracts. Exiting.")
+    """Main entry point for the application"""
+    args = parse_arguments()
+    
+    # Directory setup
+    directories = {
+        'input': './input_files',
+        'output': './output',
+        'output_segments': './output/segments',
+        'output_platform': './output/platform_versions',
+        'state': './state'
+    }
+    
+    # Create directories
+    create_directories(list(directories.values()))
+    
+    # Clean directories if requested
+    if args.clean:
+        clean_output_directories([
+            directories['output_segments'],
+            directories['output_platform']
+        ])
+    
+    # Initialize workflow controller
+    workflow = WorkflowController()
+    
+    # Load state if provided
+    if args.state_file and os.path.exists(args.state_file):
+        workflow.load_state(args.state_file)
+        logger.info(f"Loaded workflow state from {args.state_file}")
+    
+    # Process YouTube URL if provided
+    if args.youtube:
+        # TODO: Implement YouTube download functionality
+        logger.info(f"Processing YouTube URL: {args.youtube}")
+        # This would be replaced with actual implementation
+        # video_path = download_youtube_video(args.youtube, directories['input'])
+        # if video_path:
+        #     workflow.process_video(video_path, args.platforms)
+        # else:
+        #     logger.error("Failed to download YouTube video")
+        logger.info("YouTube processing not yet implemented")
         return
-
-    # Process with crew.py
-    crew.main(extracts_data)
-
-    # Process with clipper.py
-    input_folder_path = Path(input_folder)
-    crew_output_folder_path = Path(crew_output_folder)
-    output_video_folder_path = Path(output_video_folder)
-
-    for video_file in input_folder_path.glob('*.mp4'):
-        for srt_file in crew_output_folder_path.glob('*.srt'):
-            clipper.main(str(video_file), str(srt_file), str(output_video_folder_path), aspect_ratio_choice)
-            logging.info(f"Processed {video_file} with {srt_file}")
-
-    # Process with subtitler.py
-    for video_file in output_video_folder_path.glob('*_trimmed.mp4'):
-        base_name = video_file.stem.replace('_trimmed', '')
-        srt_file = crew_output_folder_path / f"{base_name}.srt"
-        if srt_file.exists():
-            subtitler.process_video_and_subtitles(str(video_file), str(srt_file), subtitler_output_folder)
-            logging.info(f"Added subtitles to {video_file}")
+    
+    # Process specific input file if provided
+    elif args.input_file:
+        if os.path.exists(args.input_file):
+            logger.info(f"Processing input file: {args.input_file}")
+            workflow.process_video(args.input_file, args.platforms)
         else:
-            logging.warning(f"No matching subtitle file found for {video_file}")
-
-    logging.info(f"All videos processed. Final output saved in {subtitler_output_folder}")
+            logger.error(f"Input file not found: {args.input_file}")
+            return
+    
+    # Process all files in input directory
+    else:
+        input_dir = args.input_dir
+        if not os.path.exists(input_dir):
+            logger.error(f"Input directory not found: {input_dir}")
+            return
+            
+        input_files = list(Path(input_dir).glob('*.mp4'))
+        if not input_files:
+            logger.error(f"No video files found in directory: {input_dir}")
+            return
+            
+        logger.info(f"Processing {len(input_files)} video files from {input_dir}")
+        for video_file in input_files:
+            result = workflow.process_video(str(video_file), args.platforms)
+            logger.info(f"Processed {video_file.name}: {result}")
+    
+    # Save final state
+    workflow.save_state()
+    
+    logger.info("Processing complete. Final output saved in output directory.")
 
 if __name__ == "__main__":
     main()
-
-# TODO: Change the options to: 1. Download YouTube video and transcribe locally 2. Download YouTube video and use remote transcript 3. Use existing video file to transcribe locally
-# TODO: Add an API key validator before proceeding with the execution to avoid discovering that the API key is invalid during later stages of the process.
-# TODO: Request the aspect ratio input before initiating the local transcription process.
