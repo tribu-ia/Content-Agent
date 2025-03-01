@@ -1,9 +1,11 @@
 <a href="https://x.com/alxfazio" target="_blank">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="images/vcc-github-banner.png">
-    <img alt="OpenAI Cookbook Logo" src="images/vcc-github-banner.png" width="400px" style="max-width: 100%; margin-bottom: 20px;">
+    <img alt="Viral Clips Crew Logo" src="images/vcc-github-banner.png" width="400px" style="max-width: 100%; margin-bottom: 20px;">
   </picture>
 </a>
+
+# Viral Clips Crew
 
 Your [CrewAI](https://github.com/joaomdmoura/crewAI) Powered Video Editing Assistant
 
@@ -17,15 +19,23 @@ Are you a social media content curator? Skip the tedious editing process and get
 
 `viral-clips-crew` helps you repackage your valuable content in new and engaging ways to capture attention on social media and drive traffic back to the original long-form piece. Whether you're looking to refresh your own content or recycle content from other creators, this tool streamlines the process, making content repurposing effortless and efficient.
 
+## Features
+
+- **AI-Powered Analysis**: Uses GPT-4o to identify the most viral-worthy segments in your videos
+- **Multi-Platform Optimization**: Creates clips optimized for Instagram, TikTok, YouTube, and LinkedIn
+- **Automatic Subtitling**: Burns subtitles directly into videos for better engagement
+- **Custom Aspect Ratios**: Choose between original aspect ratio or square (1:1) format
+- **Resume Processing**: Restart from any stage if processing is interrupted
+- **Command-Line Interface**: Flexible options for both interactive and automated use
+
 ## Requirements
 
 This project requires:
 
-- Python 3.7+
-- CrewAI
-- OpenAI API key and Google Gemini API key
-
-All required Python libraries are listed in `pyproject.toml`.
+- Python 3.8+
+- FFmpeg installed in your system
+- OpenAI API key (for content analysis)
+- Google Gemini API key (for subtitle processing)
 
 ## Installation
 
@@ -33,65 +43,134 @@ All required Python libraries are listed in `pyproject.toml`.
 
     ```shell
     git clone https://github.com/alexfazio/viral-clips-crew.git
+    cd viral-clips-crew
     ```
 
-2. Install Poetry to automatically manage project dependencies:
+2. **Option 1**: Install with Poetry (recommended)
 
     ```shell
+    # Install Poetry if you don't have it
     pip install poetry
-    ```
-
-3. Install the required Python packages using Poetry:
-
-    ```shell
+    
+    # Install dependencies
     poetry install
-    ```
-
-4. Update Pydantic:
-
-    ```shell
+    
+    # Update Pydantic
     poetry update pydantic
     ```
 
-5. Open `.env` and insert your OpenAI API key and Google Gemini API key.
+3. **Option 2**: Install with pip
 
     ```shell
-   echo -e "OPENAI_API_KEY=<your-api-key>\nGEMINI_API_KEY=<your-api-key>" > .env
+    # Create a virtual environment
+    python -m venv venv
+    
+    # Activate the virtual environment
+    # On Windows:
+    venv\Scripts\activate
+    # On macOS/Linux:
+    source venv/bin/activate
+    
+    # Install dependencies
+    pip install -r requirements.txt
+    ```
+
+4. Set up your API keys:
+
+    ```shell
+    # Create .env file with your API keys
+    echo "OPENAI_API_KEY=your-openai-api-key-here" > .env
+    echo "GEMINI_API_KEY=your-gemini-api-key-here" >> .env
     ```
 
 ## Usage
 
-After setting up, drag your desired clip into the `input_files` directory. 
+### Basic Usage
 
-**Gemini can process videos up to 1 hour in length. If you are using the OpenAI API, please ensure that the clip is less than 15 minutes in length. The current LLM context windows are approximately 15 minutes.**
+Place your video in the `input_files` directory and run:
 
-Run `viral-clips-crew` using Poetry with the following command:
+```shell
+# Using Poetry
+poetry run python app.py
 
-    ```shell
-    poetry run python app.py
-    ```
+# Or with standard Python (in activated virtual environment)
+python app.py
+```
 
-This will kickstart the process from beginning to completion.
+The program will:
+1. Transcribe the video using Whisper
+2. Analyze the transcript to find viral-worthy segments
+3. Match transcript segments with precise timing information
+4. Extract video clips for each viral segment
+5. Burn subtitles into the clips
 
 Final output will be in the `subtitler_output` directory.
 
-## Support
+### Command Line Options
 
-If you like this project and want to support it, please consider leaving a star. Every contribution helps keep the project running. Thank you!
+The program supports various command-line arguments for more control:
+
+```shell
+# Process a specific video file
+python app.py --input-file /path/to/your/video.mp4
+
+# Download and process a YouTube video
+python app.py --youtube https://www.youtube.com/watch?v=your-video-id
+
+# Set the aspect ratio (1=original, 2=square)
+python app.py --aspect-ratio 2
+
+# Clean output directories before processing
+python app.py --clean
+
+# Restart from last checkpoint if processing was interrupted
+python app.py --restart
+
+# Start from a specific processing stage
+python app.py --stage extract
+```
+
+Run `python app.py --help` to see all available options.
+
+## Understanding the Process
+
+The workflow consists of six main stages:
+
+1. **Setup**: Validates environment and dependencies
+2. **Input**: Processes input video from file or YouTube
+3. **Transcribe**: Generates transcript using Whisper
+4. **Extract**: Identifies viral segments using GPT-4o
+5. **Align**: Matches transcript segments with precise timing using Gemini
+6. **Clip**: Extracts video segments based on timestamps
+7. **Subtitle**: Burns subtitles into the final clips
+
+If the process is interrupted, you can restart from any stage using the `--restart` or `--stage` options.
 
 ## Troubleshooting
 
-If you encounter a `TypeError: 'NoneType' object is not iterable`, please check the following:  
-- Ensure your API keys are correctly set in the `.env` file.  
-- Verify that you have enough pay-as-you-go credits in your OpenAI account and Google Cloud account.
+### Common Issues
 
-## Note
+- **API Key Issues**: Ensure your API keys are correctly set in the `.env` file
+- **FFmpeg Missing**: Install FFmpeg and make sure it's in your system PATH
+- **No Videos Found**: Verify that your video files are in the `input_files` directory
+- **NoneType Error**: May indicate an API call failure - check your API key quotas
 
-The code for `viral-clips-crew` is intended for demonstrative purposes and is not meant for production use. The API keys are hardcoded and need to be replaced with your own. Always ensure your keys are kept secure.
+### Debugging
+
+For detailed logs, check the `viral_clips.log` file created in the project directory.
+
+If you encounter a specific error, you can usually restart from the failed stage:
+
+```shell
+python app.py --stage [stage_name]
+```
+
+Where `stage_name` is one of: setup, input, transcribe, extract, align, clip, subtitle.
 
 ## Credits
 
-Thank you to [Rip&Tear](https://x.com/Cyb3rCh1ck3n) for his ongoing assistance in improving this tool.
+- Original concept by [Alex Fazio](https://x.com/alxfazio)
+- Additional development by [Rip&Tear](https://x.com/Cyb3rCh1ck3n)
 
 ## License
 
