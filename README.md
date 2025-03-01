@@ -5,19 +5,44 @@
   </picture>
 </a>
 
-# Viral Clips Crew
+# Tribu IA Content Agent
+
+This is a modified version of the original Viral Clips Generator project.
+
+## Attribution
+Original project by [Alex Fazio](https://github.com/alexfazio)
+Original repository: [\[Original Project URL\]](https://github.com/alexfazio/viral-clips-crew)
+Modified by TribuIA Co - Cristian Cordoba - ... 
+
+A## bout This Version
+This enhanced version of Viral Clips Crew has been specifically developed to address the scaling challenges faced by the Tribu Community. As our community continues to grow rapidly, we needed a solution that could keep pace with our expanding social media presence, increasing program initiatives, and the valuable contributions from our community members.
+Our goal was to develop an intelligent content management system that could efficiently process and distribute the wealth of knowledge shared within our community across multiple platforms while maintaining our distinct brand voice and quality standards.
+
+## Original Project
+This project is based on the excellent work by Alex Fazio, whose original content extraction framework provided the foundation for our enhanced system.
+
+## Tribu Extension
+The Viral Clips Crew extension was born from the Tribu Community's increasing growth and the necessity to keep pace with our social media updates. As the quantity of initiatives in our programs and valuable interventions from our community members expanded, we needed a scalable, intelligent solution to manage our content pipeline effectively.
+This extension aims to create a comprehensive content management ecosystem that can:
+
+- Automatically identify high-value segments from our events and discussions
+- Maintain brand consistency across all distributed content
+- Optimize clips for platform-specific requirements
+- Ensure quality through continuous evaluation
+- Scale with our growing community needs
+
+## Architecture Vision
+The Viral Clips Crew Tribu Extension implements a sophisticated multi-agent architecture designed to transform raw video content into platform-optimized social media assets:
+
 
 Your [CrewAI](https://github.com/joaomdmoura/crewAI) Powered Video Editing Assistant
 
-Are you a social media content curator? Skip the tedious editing process and get polished video highlights in minutes. `viral-clips-crew` watches and listens to long-form content, extracting the most striking and potentially viral segments, ready for publication on social media.
 
-## Content Repurposing Made Easy
+>>>
+[WIP]
 
-<div align="center">
-  <img src="https://github.com/alexfazio/viral-clips-crew/assets/34505954/c69da629-06eb-4279-a5cb-0d8d7fc1dfee" width="600px" height="auto">
-</div>
+>>>
 
-`viral-clips-crew` helps you repackage your valuable content in new and engaging ways to capture attention on social media and drive traffic back to the original long-form piece. Whether you're looking to refresh your own content or recycle content from other creators, this tool streamlines the process, making content repurposing effortless and efficient.
 
 ## Features
 
