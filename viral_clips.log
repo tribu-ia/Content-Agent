@@ -1,0 +1,82 @@
+2025-03-29 21:13:42,594 - INFO - Using video file: input_files/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti.mp4
+2025-03-29 21:13:42,594 - INFO - Initialized chunker with chunk_size=300s, overlap=30s
+2025-03-29 21:13:42,777 - INFO - Video duration: 6815.265669 seconds (113.59 minutes)
+2025-03-29 21:13:42,871 - INFO - Video needs chunking: True
+2025-03-29 21:13:42,871 - INFO - Creating video chunks...
+2025-03-29 21:13:43,135 - INFO - Created chunk 1/26: 0 to 300
+2025-03-29 21:13:43,289 - INFO - Created chunk 2/26: 270 to 570
+2025-03-29 21:13:43,445 - INFO - Created chunk 3/26: 540 to 840
+2025-03-29 21:13:43,596 - INFO - Created chunk 4/26: 810 to 1110
+2025-03-29 21:13:43,759 - INFO - Created chunk 5/26: 1080 to 1380
+2025-03-29 21:13:43,922 - INFO - Created chunk 6/26: 1350 to 1650
+2025-03-29 21:13:44,081 - INFO - Created chunk 7/26: 1620 to 1920
+2025-03-29 21:13:44,237 - INFO - Created chunk 8/26: 1890 to 2190
+2025-03-29 21:13:44,407 - INFO - Created chunk 9/26: 2160 to 2460
+2025-03-29 21:13:44,570 - INFO - Created chunk 10/26: 2430 to 2730
+2025-03-29 21:13:44,715 - INFO - Created chunk 11/26: 2700 to 3000
+2025-03-29 21:13:44,865 - INFO - Created chunk 12/26: 2970 to 3270
+2025-03-29 21:13:45,025 - INFO - Created chunk 13/26: 3240 to 3540
+2025-03-29 21:13:45,188 - INFO - Created chunk 14/26: 3510 to 3810
+2025-03-29 21:13:45,344 - INFO - Created chunk 15/26: 3780 to 4080
+2025-03-29 21:13:45,487 - INFO - Created chunk 16/26: 4050 to 4350
+2025-03-29 21:13:45,640 - INFO - Created chunk 17/26: 4320 to 4620
+2025-03-29 21:13:45,812 - INFO - Created chunk 18/26: 4590 to 4890
+2025-03-29 21:13:45,963 - INFO - Created chunk 19/26: 4860 to 5160
+2025-03-29 21:13:46,114 - INFO - Created chunk 20/26: 5130 to 5430
+2025-03-29 21:13:46,267 - INFO - Created chunk 21/26: 5400 to 5700
+2025-03-29 21:13:46,417 - INFO - Created chunk 22/26: 5670 to 5970
+2025-03-29 21:13:46,569 - INFO - Created chunk 23/26: 5940 to 6240
+2025-03-29 21:13:46,727 - INFO - Created chunk 24/26: 6210 to 6510
+2025-03-29 21:13:46,902 - INFO - Created chunk 25/26: 6480 to 6780
+2025-03-29 21:13:47,016 - INFO - Created chunk 26/26: 6750 to 6815.265669
+2025-03-29 21:13:47,017 - INFO - Successfully created 26 chunks
+2025-03-29 21:13:47,017 - INFO - Chunk 1: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_000.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 2: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_001.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 3: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_002.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 4: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_003.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 5: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_004.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 6: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_005.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 7: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_006.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 8: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_007.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 9: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_008.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 10: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_009.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 11: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_010.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 12: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_011.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 13: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_012.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 14: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_013.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 15: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_014.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 16: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_015.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 17: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_016.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 18: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_017.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 19: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_018.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 20: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_019.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 21: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_020.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 22: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_021.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 23: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_022.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 24: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_023.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 25: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_024.mp4
+2025-03-29 21:13:47,017 - INFO - Chunk 26: chunks/Semana_de_Agentes_-_Producto_-_La_IA_que_Hace_el_Trabajo_por_Ti_chunk_025.mp4
+2025-03-29 21:13:47,018 - INFO - Retrieved 26 chunks from manifest
+2025-03-29 21:13:47,018 - INFO - Marked chunk 0 as processed: True
+2025-03-29 21:13:47,018 - INFO - Successfully verified chunk was marked as processed
+2025-03-29 21:13:47,018 - INFO - Original timestamp: 00:01:30,500, Adjusted: 00:02:30,500
+2025-03-29 21:13:47,018 - INFO - Successfully tested subtitle timestamp adjustment
+2025-03-29 21:13:47,018 - INFO - Original SRT:
+1
+00:00:01,000 --> 00:00:05,000
+This is a test subtitle
+
+2
+00:00:06,000 --> 00:00:10,000
+This is another test subtitle
+
+2025-03-29 21:13:47,018 - INFO - Adjusted SRT:
+1
+00:01:01,000 --> 00:01:05,000
+This is a test subtitle
+
+2
+00:01:06,000 --> 00:01:10,000
+This is another test subtitle
+
+2025-03-29 21:13:47,018 - INFO - Chunker test completed successfully!

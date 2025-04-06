@@ -50,6 +50,7 @@ Your [CrewAI](https://github.com/joaomdmoura/crewAI) Powered Video Editing Assis
 - **Multi-Platform Optimization**: Creates clips optimized for Instagram, TikTok, YouTube, and LinkedIn
 - **Automatic Subtitling**: Burns subtitles directly into videos for better engagement
 - **Custom Aspect Ratios**: Choose between original aspect ratio or square (1:1) format
+- **Long Video Processing**: Automatically chunks long videos for efficient processing
 - **Resume Processing**: Restart from any stage if processing is interrupted
 - **Command-Line Interface**: Flexible options for both interactive and automated use
 
@@ -153,6 +154,12 @@ python app.py --restart
 
 # Start from a specific processing stage
 python app.py --stage extract
+
+# Video chunking options
+python app.py --disable-chunking         # Disable automatic chunking for long videos
+python app.py --force-chunking           # Force chunking even for short videos
+python app.py --chunk-size 300           # Set custom chunk size in seconds (default: 600)
+python app.py --chunk-overlap 60         # Set custom overlap between chunks in seconds (default: 30)
 ```
 
 Run `python app.py --help` to see all available options.
@@ -170,6 +177,33 @@ The workflow consists of six main stages:
 7. **Subtitle**: Burns subtitles into the final clips
 
 If the process is interrupted, you can restart from any stage using the `--restart` or `--stage` options.
+
+### Long Video Processing
+
+For videos longer than 60 minutes, the system automatically splits them into manageable 10-minute chunks with 30-second overlaps. This ensures:
+
+- Reduced memory usage during processing
+- More focused content analysis per segment
+- Better performance with the AI models
+
+The system processes each chunk individually, then intelligently selects the best viral segments across all chunks to create the final clips. This process is handled automatically, but you can control it with the following options:
+
+- `--disable-chunking`: Skip chunking even for long videos
+- `--force-chunking`: Force chunking even for short videos
+- `--chunk-size`: Customize the size of each chunk in seconds (default: 600)
+- `--chunk-overlap`: Customize the overlap between chunks in seconds (default: 30)
+
+### Working with Chunks
+
+When chunking is enabled:
+
+1. The original video is split into overlapping chunks
+2. Each chunk is processed independently through the pipeline
+3. A manifest file tracks the relationship between chunks
+4. The best viral segments are selected from all chunks
+5. Final clips are created from the original video using adjusted timestamps
+
+This approach ensures consistent quality regardless of video length, while maintaining the context across chunk boundaries.
 
 ## Troubleshooting
 

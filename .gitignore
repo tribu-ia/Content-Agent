@@ -85,4 +85,17 @@ crew_output
 whisper_output
 clipper_output
 input_files/*
+
+# Media storage directories
+input_files/
+crew_output/
+whisper_output/
+clipper_output/
+strs/
+subtitler_output/
+chunk/
+chunks/
+chunks_output/
+
+# Keep the placeholder file
 !input_files/PLACE_CLIPS_HERE

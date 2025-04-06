@@ -29,12 +29,41 @@ def yt_vid_url_to_mp4(yt_vid_url, mp4_dir_save_path):
         'format': 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best',
         'outtmpl': os.path.join(mp4_dir_save_path, '%(title)s.%(ext)s'),
         'restrictfilenames': True,
+        # Additional options to bypass bot protection
+        'nocheckcertificate': True,
+        'ignoreerrors': True,
+        'no_warnings': True,
+        'quiet': False,
+        'verbose': True,
+        'cookiefile': 'cookies.txt',  # Optional: Add cookies if you have them
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36',
+        'referer': 'https://www.youtube.com/',
     }
 
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        info = ydl.extract_info(yt_vid_url, download=False)
-        filename = ydl.prepare_filename(info)
-        ydl.download([yt_vid_url])
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(yt_vid_url, download=False)
+            filename = ydl.prepare_filename(info)
+            logging.info(f"Downloading video: {info.get('title', 'Unknown title')}")
+            logging.info(f"Video duration: {info.get('duration', 'Unknown')} seconds")
+            ydl.download([yt_vid_url])
+    except Exception as e:
+        logging.error(f"Error downloading video: {e}")
+        # Let's try a simpler format as fallback
+        ydl_opts_simple = {
+            'format': 'best',
+            'outtmpl': os.path.join(mp4_dir_save_path, '%(title)s.%(ext)s'),
+            'restrictfilenames': True,
+            'nocheckcertificate': True,
+            'ignoreerrors': True,
+        }
+        try:
+            with yt_dlp.YoutubeDL(ydl_opts_simple) as ydl:
+                info = ydl.extract_info(yt_vid_url, download=True)
+                filename = ydl.prepare_filename(info)
+        except Exception as e2:
+            logging.error(f"Second attempt to download failed: {e2}")
+            raise e2
 
     video_file = Path(filename)
 
@@ -86,18 +115,55 @@ def yt_vid_id_to_txt(transcript, yt_video_id, txt_save_path):
         f.write(full_transcript)
 
 
-def main(yt_vid_url, mp4_dir_save_path, srt_dir_save_path, txt_dir_save_path):
+def main(yt_vid_url, mp4_dir_save_path, srt_dir_save_path, txt_dir_save_path, use_chunker=True):
     # Setup logging
     logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
     yt_video_id = extract_video_id(yt_vid_url)
+    logging.info(f"Processing YouTube video ID: {yt_video_id}")
 
-    # this creates YouTubeTranscriptApi object
-    transcript = YouTubeTranscriptApi.get_transcript(yt_video_id)
+    # Try to get Spanish transcript if English is not available
+    try:
+        transcript = YouTubeTranscriptApi.get_transcript(yt_video_id)
+        logging.info("Successfully retrieved English transcript")
+    except Exception as e:
+        logging.info("English transcript not available, trying Spanish transcript")
+        try:
+            transcript = YouTubeTranscriptApi.get_transcript(yt_video_id, languages=['es'])
+            logging.info("Successfully retrieved Spanish transcript")
+        except Exception as es_error:
+            logging.error(f"Failed to retrieve transcript: {es_error}")
+            raise es_error
 
-    yt_vid_url_to_mp4(yt_vid_url, mp4_dir_save_path)
+    # Download the video
+    video_path = yt_vid_url_to_mp4(yt_vid_url, mp4_dir_save_path)
+    logging.info(f"Video downloaded to: {video_path}")
+    
+    # Process with chunker if needed for long videos
+    if use_chunker:
+        try:
+            from chunker import VideoChunker
+            chunker = VideoChunker()
+            chunker.setup()
+            
+            if chunker.needs_chunking(video_path):
+                logging.info("Video is long, splitting into chunks...")
+                chunks = chunker.split_video(video_path)
+                if chunks:
+                    logging.info(f"Video split into {len(chunks)} chunks")
+                else:
+                    logging.warning("Failed to split video, proceeding with full video")
+            else:
+                logging.info("Video is short enough, no chunking needed")
+        except ImportError:
+            logging.warning("Chunker module not available, proceeding with full video")
+    
+    # Generate subtitles and transcript
     yt_vid_id_to_srt(transcript, yt_video_id, srt_dir_save_path)
-    yt_vid_id_to_txt(transcript,  yt_video_id, txt_dir_save_path)
+    yt_vid_id_to_txt(transcript, yt_video_id, txt_dir_save_path)
+    
+    logging.info("Processing complete!")
+    return video_path
 
 if __name__ == "__main__":
     yt_vid_url = input("Enter the YouTube URL: ")
