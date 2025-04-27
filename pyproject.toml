@@ -26,6 +26,7 @@ youtube-transcript-api = "*"
 lockfile = "*"
 yt-dlp = "*"
 requests = "*"
+google-generativeai = "*"
 
 [[tool.poetry.packages]]
 include = "*.py"

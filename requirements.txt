@@ -16,3 +16,4 @@ lockfile>=0.12.2
 yt-dlp>=2023.7.6
 requests>=2.31.0
 python-dotenv>=1.0.0
+google-generativeai>=0.3.0
