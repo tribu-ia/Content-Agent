@@ -98,4 +98,4 @@ chunks/
 chunks_output/
 
 # Keep the placeholder file
-!input_files/PLACE_CLIPS_HERE
+!input_files/PLACE_CLIPS_HERE.env.test
