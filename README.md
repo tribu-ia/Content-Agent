@@ -5,7 +5,7 @@
   </picture>
 </a>
 
-# Tribu IA Content Agent
+# Tribu IA Content Agent .
 
 This is a modified version of the original Viral Clips Generator project.
 
